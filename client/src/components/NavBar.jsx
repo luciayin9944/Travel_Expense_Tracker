@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../styles.jsx";
 
-function NavBar({ setUser }) {
+function NavBar({ user, setUser }) { 
+  // props from App.jsx
   function handleLogoutClick() {
     localStorage.removeItem("token");
     setUser(null);
@@ -15,9 +16,11 @@ function NavBar({ setUser }) {
         <Link to="/">My App</Link>
       </Logo>
       <Nav>
-        <Button>
-          Do Something
-        </Button>
+        {user && (
+          <Button>
+            {user.username}
+          </Button>
+        )}
         <Button variant="outline" onClick={handleLogoutClick}>
           Logout
         </Button>

@@ -26,8 +26,9 @@ function App() {
 
   return (
     <>
-      <NavBar setUser={setUser} />
+      <NavBar setUser={setUser} user={user} />
       <main>
+        <h2>welcome,{user.username}!</h2>
         <p>You are logged in!</p>
       </main>
     </>

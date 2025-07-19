@@ -53,6 +53,11 @@ export const Textarea = styled.textarea`
   resize: none;
 `;
 
+export const Error = styled.p`
+  color: red;
+  margin-top: 4px;
+`;
+
 // === Button Section ===
 const COLORS = {
   primary: {
@@ -92,6 +97,7 @@ const OutlineButton = styled(ButtonBase)`
     background: hsl(235deg 85% 97%);
   }
 `;
+
 
 // Button component that switches between Fill and Outline
 export function Button({ variant = "fill", color = "primary", ...props }) {

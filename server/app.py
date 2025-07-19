@@ -20,8 +20,8 @@ class Signup(Resource):
         user.password_hash = password
 
         try:
-            db.seesion.add(user)
-            db.seesion.commit()
+            db.session.add(user)
+            db.session.commit()
             access_token = create_access_token(identity=str(user.id))
             response = make_response(jsonify(token=access_token, user=UserSchema().dump(user)), 200)
             return response
@@ -29,9 +29,18 @@ class Signup(Resource):
             return {'errors': ['422 Unprocessable Entity']}, 422
         
 
+class WhoAmI(Resource):
+    @jwt_required() # Ensure the user is authenticated using JWT
+    def get(self):
+        user_id = get_jwt_identity() ## Get the user's ID from the JWT token
+        user = User.query.filter(User.id==user_id).first()
+
+        return UserSchema().dump(user), 200
+    
+
 class Login(Resource):
     def post(self):
-        data = request.get_json
+        data = request.get_json()
         username = data.get('username')
         password = data.get('password')
 
@@ -41,6 +50,8 @@ class Login(Resource):
             access_token = create_access_token(identity=str(user.id))
             response = make_response(jsonify(token=access_token, user=UserSchema().dump(user)), 200)
             return response
+        
+        return {'errors': ['401 Unauthorized']}, 401
 
 
 
@@ -50,7 +61,9 @@ class Login(Resource):
 
 
 # Register resources
-# api.add_resource(Signup, '/signup')
+api.add_resource(Signup, '/signup', endpoint='signup')
+api.add_resource(WhoAmI, '/me', endpoint='me')
+api.add_resource(Login, '/login', endpoint='login')
 
 
 if __name__ == '__main__':

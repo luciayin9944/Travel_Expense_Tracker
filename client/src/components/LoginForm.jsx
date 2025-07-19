@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Button, Input, FormField, Label } from "../styles.jsx";
+import { Button, Input, FormField, Label, Error } from "../styles.jsx";
 
 function LoginForm({ onLogin }) {
   const [username, setUsername] = useState("");
@@ -54,11 +54,11 @@ function LoginForm({ onLogin }) {
           {isLoading ? "Loading..." : "Login"}
         </Button>
       </FormField>
-      {/* <FormField>
+      <FormField>
         {errors.map((err) => (
           <Error key={err}>{err}</Error>
         ))}
-      </FormField> */}
+      </FormField>
     </form>
   );
 }
