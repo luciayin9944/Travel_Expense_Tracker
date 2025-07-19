@@ -40,6 +40,7 @@ class Login(Resource):
         if user and user.authenticate(password):
             access_token = create_access_token(identity=str(user.id))
             response = make_response(jsonify(token=access_token, user=UserSchema().dump(user)), 200)
+            return response
 
 
 
