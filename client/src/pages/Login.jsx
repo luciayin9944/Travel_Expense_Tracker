@@ -1,3 +1,5 @@
+// Login.jsx
+
 import { useState } from "react";
 import styled from "styled-components";
 import LoginForm from "../components/LoginForm";
@@ -41,7 +43,7 @@ function Login({ onLogin }) {
 const Logo = styled.h1`
   font-family: "Permanent Marker", cursive;
   font-size: 3rem;
-  color: deeppink;
+  color: #255b80;
   margin: 8px 0 16px;
 `;
 

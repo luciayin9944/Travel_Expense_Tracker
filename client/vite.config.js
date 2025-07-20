@@ -5,9 +5,12 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/signup': 'http://localhost:5555',
-      '/login': 'http://localhost:5555',
-      '/me': 'http://localhost:5555',
+      "/me": "http://localhost:5000",
+      "/signup": "http://localhost:5000",
+      "/login": "http://localhost:5000",
+      "/trips": "http://localhost:5000",
+      "/expenses": "http://localhost:5000",
+      "/expenses/<int:id>": "http://localhost:5000",
     },
   },
 })

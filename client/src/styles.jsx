@@ -61,12 +61,12 @@ export const Error = styled.p`
 // === Button Section ===
 const COLORS = {
   primary: {
-    "--main": "indigo",
+    "--main": "grey",
     "--accent": "white",
   },
   secondary: {
     "--main": "lavenderblush",
-    "--accent": "indigo",
+    "--accent": "grey",
   },
 };
 

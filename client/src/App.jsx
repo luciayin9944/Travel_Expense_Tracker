@@ -1,26 +1,34 @@
+// App.jsx
+
 import React, { useEffect, useState } from "react";
 import NavBar from "./components/NavBar.jsx";
 import Login from "./pages/Login.jsx";
+import TripList from "./pages/TripList.jsx";     
+import NewTrip from "./pages/NewTrip.jsx";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetch("/me", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      }
-    }).then((r) => {
-      if (r.ok) {
-        r.json().then((user) => setUser(user));
-      }
-    });
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetch("/me", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }).then((r) => {
+        if (r.ok) {
+          r.json().then((user) => setUser(user));
+        }
+      });
+    }
   }, []);
 
   const onLogin = (token, user) => {
     localStorage.setItem("token", token);
     setUser(user);
-  }
+  };
 
   if (!user) return <Login onLogin={onLogin} />;
 
@@ -28,8 +36,16 @@ function App() {
     <>
       <NavBar setUser={setUser} user={user} />
       <main>
-        <h2>welcome,{user.username}!</h2>
-        <p>You are logged in!</p>
+        <Routes>
+          <Route
+            path="/newTrip"
+            element={<NewTrip user={user} />}
+          />
+          <Route
+            path="/"
+            element={<TripList userId={user.id} />}
+          />
+        </Routes>
       </main>
     </>
   );

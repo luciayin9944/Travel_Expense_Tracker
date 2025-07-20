@@ -1,3 +1,5 @@
+//NavBar.jsx
+
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -13,7 +15,7 @@ function NavBar({ user, setUser }) {
   return (
     <Wrapper>
       <Logo>
-        <Link to="/">My App</Link>
+        <Link to="/">Travel Spending</Link>
       </Logo>
       <Nav>
         {user && (
@@ -38,9 +40,10 @@ const Wrapper = styled.header`
 
 const Logo = styled.h1`
   font-family: "Permanent Marker", cursive;
-  font-size: 3rem;
-  color: deeppink;
-  margin: 0;
+  font-size: 2rem;
+  color: #255b80;
+  margin-right: auto;
+  left: 80px;
   line-height: 1;
 
   a {
@@ -48,6 +51,7 @@ const Logo = styled.h1`
     text-decoration: none;
   }
 `;
+
 
 const Nav = styled.nav`
   display: flex;
