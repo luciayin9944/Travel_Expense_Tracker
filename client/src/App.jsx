@@ -1,12 +1,13 @@
 // App.jsx
 import React, { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar.jsx";
 import SideBar from "./components/SideBar.jsx";
 import Login from "./pages/Login.jsx";
 import TripList from "./pages/TripList.jsx";
 import NewTrip from "./pages/NewTrip.jsx";
-import { Routes, Route } from "react-router-dom";
 import ExpenseList from "./pages/ExpenseList.jsx";
+import NewExpense from "./pages/NewExpense.jsx";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -39,6 +40,7 @@ function App() {
           <Route path="/trips" element={<TripList userId={user.id} />} />
           <Route path="/newTrip" element={<NewTrip user={user} />} />
           <Route path="/trips/:trip_id/expenses" element={<ExpenseList />} />
+          <Route path="/trips/:trip_id/new_expense" element={<NewExpense />} />
           {/* <Route path="/expenses" element={<ExpenseList userId={user.id} />} />
           <Route path="/" element={<TripList userId={user.id} />} /> */}
         </Routes>

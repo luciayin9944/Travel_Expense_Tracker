@@ -95,7 +95,7 @@ function ExpenseList() {
 
       <div style={{ textAlign: "center" }}>
         {/* <p style={{ fontWeight: "bold" }}>Total: ${totalExpense.toFixed(2)}</p> */}
-        <Button as={Link} to="/new_expense" variant="outline">
+        <Button as={Link} to={`/trips/${trip_id}/new_expense`} variant="outline">
           New Expense
         </Button>
       </div>
