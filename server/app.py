@@ -101,6 +101,24 @@ class TripsIndex(Resource):
 
             return {'errors': ['Trip creation failed.']}, 422
         
+        
+class TripDetail(Resource):
+    @jwt_required()
+    def get(self, id):
+        curr_user_id = get_jwt_identity()
+        trip = Trip.query.get(id)
+
+        if not trip:
+            return {"error": "Trip not found"}, 404
+        
+        print(curr_user_id)
+        print(trip.user_id)
+        
+        if trip.user_id != int(curr_user_id):
+            return {"error": "Unauthorized"}, 403
+        
+        return TripSchema().dump(trip), 200
+        
 
 
 class ExpensesIndex(Resource):
@@ -260,6 +278,7 @@ api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(WhoAmI, '/me', endpoint='me')
 api.add_resource(Login, '/login', endpoint='login')
 api.add_resource(TripsIndex, '/trips', endpoint='trips')
+api.add_resource(TripDetail, '/trips/<int:id>', endpoint='trip_detail')
 api.add_resource(ExpensesIndex, '/expenses', endpoint='expenses')
 api.add_resource(ExpenseDetail, '/expenses/<int:id>', endpoint='expense_detail')
 

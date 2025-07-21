@@ -1,4 +1,4 @@
-// ExpenseList.js
+// ExpenseList.jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -11,7 +11,7 @@ function ExpenseList() {
   const [expenses, setExpenses] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({
-    purchase_item: "",
+    expense_item: "",
     category: "",
     amount: "",
     date: ""
@@ -45,11 +45,29 @@ function ExpenseList() {
     }, [trip_id, currentPage]);
 
 
+    const [tripInfo, setTripInfo] = useState(null);
+
+    useEffect(() => {
+        fetch(`/trips/${trip_id}`, {
+            headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        })
+            .then((r) => r.ok ? r.json() : Promise.reject("Failed to fetch trip info"))
+            .then((data) => {
+            setTripInfo(data);
+            })
+            .catch((err) => {
+            console.error("Trip info fetch error:", err);
+            });
+    }, [trip_id]);
+
+
 
   function handleEdit(expense) {
     setEditingId(expense.id);
     setEditFormData({
-      purchase_item: expense.purchase_item,
+      expense_item: expense.expense_item,
       category: expense.category,
       amount: expense.amount,
       date: expense.date.slice(0, 10),
@@ -91,7 +109,16 @@ function ExpenseList() {
 
   return (
     <div>
-      <Title>My Expenses</Title>
+      {tripInfo ? (
+        <>
+            <Title>Expenses in {tripInfo.destination}</Title>
+            <p style={{ textAlign: "center", marginBottom: "2rem" }}>
+                📅 {new Date(tripInfo.start_date).toLocaleDateString()} - {new Date(tripInfo.end_date).toLocaleDateString()}
+            </p>
+        </>
+        ) : (
+        <Title>Loading trip info...</Title>
+      )}
 
       <div style={{ textAlign: "center" }}>
         {/* <p style={{ fontWeight: "bold" }}>Total: ${totalExpense.toFixed(2)}</p> */}
@@ -109,7 +136,7 @@ function ExpenseList() {
                   <EditForm>
                     <input
                       name="purchase_item"
-                      value={editFormData.purchase_item}
+                      value={editFormData.expense_item}
                       onChange={handleEditFormChange}
                     />
                     <select
@@ -140,7 +167,7 @@ function ExpenseList() {
                   </EditForm>
                 ) : (
                   <>
-                    <h2>{expense.purchase_item}</h2>
+                    <h2>{expense.expense_item}</h2>
                     <p>
                       📂 {expense.category} <br />
                       💵 ${expense.amount} <br />
@@ -156,7 +183,7 @@ function ExpenseList() {
         ) : (
           <>
             <h3>No Expense Records Found</h3>
-            <Button as={Link} to="/new">Add a New Expense</Button>
+            <Button as={Link} to={`/trips/${trip_id}/new_expense`}>Add a New Expense</Button>
           </>
         )}
       </Wrapper>
