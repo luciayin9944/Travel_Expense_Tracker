@@ -8,6 +8,8 @@ import TripList from "./pages/TripList.jsx";
 import NewTrip from "./pages/NewTrip.jsx";
 import ExpenseList from "./pages/ExpenseList.jsx";
 import NewExpense from "./pages/NewExpense.jsx";
+import ExpenseSummary from "./pages/ExpenseSummary.jsx";
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -41,6 +43,7 @@ function App() {
           <Route path="/newTrip" element={<NewTrip user={user} />} />
           <Route path="/trips/:trip_id/expenses" element={<ExpenseList />} />
           <Route path="/trips/:trip_id/new_expense" element={<NewExpense />} />
+          <Route path="/trips/:trip_id/summary" element={<ExpenseSummary />} />
           {/* <Route path="/expenses" element={<ExpenseList userId={user.id} />} />
           <Route path="/" element={<TripList userId={user.id} />} /> */}
         </Routes>

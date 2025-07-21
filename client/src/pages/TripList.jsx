@@ -39,6 +39,11 @@ function TripList() {
     return (
         <Wrapper>
             <Title>My Trips</Title>
+            <div style={{ textAlign: "center" }}>
+                <Button as={Link} to="/newTrip" >
+                New Trip
+                </Button>
+            </div>
             {trips.length > 0 ? (
                 <>
                     {trips.map((trip) => (
@@ -46,8 +51,6 @@ function TripList() {
                             <Box>
                                 <h2>{trip.destination}</h2>
                                 <p>
-                                    {/* 📅 Date: from {new Date(trip.start_date).toLocaleDateString()} to{" "}
-                                    {new Date(trip.end_date).toLocaleDateString()} */}
                                     📅 {new Date(trip.start_date).toLocaleDateString()} ~ {new Date(trip.end_date).toLocaleDateString()}
                                     <br />
                                     💵 Budget: ${trip.budget}
@@ -55,13 +58,12 @@ function TripList() {
                                 <Button variant="outline" onClick={()=>handleViewExpenses(trip.id)}>
                                     View Expenses
                                 </Button>
+                                <Button variant="outline" as={Link} to={`/trips/${trip.id}/summary`}>
+                                    View Summary
+                                </Button>
                             </Box>
                         </TripCard>
                     ))}
-
-                    <Button as={Link} to="/newTrip">
-                        Add a New Trip
-                    </Button>
                 </>
             ) : (
                 <>
@@ -89,6 +91,7 @@ const Title = styled.h1`
 
 
 const TripCard = styled.article`
+  margin-top: 40px;
   margin-bottom: 40px;
   padding: 16px;
   background-color: #f6f8fa;
