@@ -6,6 +6,7 @@ import Login from "./pages/Login.jsx";
 import TripList from "./pages/TripList.jsx";
 import NewTrip from "./pages/NewTrip.jsx";
 import { Routes, Route } from "react-router-dom";
+import ExpenseList from "./pages/ExpenseList.jsx";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -34,9 +35,12 @@ function App() {
       <SideBar />
       <div style={{ marginLeft: "200px", paddingTop: "60px", padding: "20px" }}>
         <Routes>
-          <Route path="/newTrip" element={<NewTrip user={user} />} />
-          <Route path="/trips" element={<TripList userId={user.id} />} />
           <Route path="/" element={<TripList userId={user.id} />} />
+          <Route path="/trips" element={<TripList userId={user.id} />} />
+          <Route path="/newTrip" element={<NewTrip user={user} />} />
+          <Route path="/trips/:trip_id/expenses" element={<ExpenseList />} />
+          {/* <Route path="/expenses" element={<ExpenseList userId={user.id} />} />
+          <Route path="/" element={<TripList userId={user.id} />} /> */}
         </Routes>
       </div>
     </>

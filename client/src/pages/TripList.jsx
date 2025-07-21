@@ -4,33 +4,41 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Box, Button } from "../styles";
+import { useNavigate } from "react-router-dom";
 
 function TripList() {
     const [trips, setTrips] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetch("/trips", {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
+    fetch("/trips", {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+    })
+        .then((r) => {
+            if (!r.ok) {
+                throw new Error("Failed to fetch trips");
             }
-        }).then((r) => {
-            if (r.ok) {
-                return r.json();
-            } else {
-                throw new Error("Unauthorized or failed to fetch");
-            }
-        }).then((data) => {
+            return r.json();
+        })
+        .then((data) => {
             console.log(data);
             setTrips(data.trips || []);
-        }).catch((error) => {
+        })
+        .catch((error) => {
             console.error("Error fetching trips:", error);
             setTrips([]);
         });
     }, []);
 
+    const handleViewExpenses = (tripId) => {
+        navigate(`/trips/${tripId}/expenses`);
+    };
+
     return (
         <Wrapper>
-            <Title>Trips</Title>
+            <Title>My Trips</Title>
             {trips.length > 0 ? (
                 <>
                     {trips.map((trip) => (
@@ -38,13 +46,14 @@ function TripList() {
                             <Box>
                                 <h2>{trip.destination}</h2>
                                 <p>
-                                    📅 Date: from {new Date(trip.start_date).toLocaleDateString()} to{" "}
-                                    {new Date(trip.end_date).toLocaleDateString()}
+                                    {/* 📅 Date: from {new Date(trip.start_date).toLocaleDateString()} to{" "}
+                                    {new Date(trip.end_date).toLocaleDateString()} */}
+                                    📅 {new Date(trip.start_date).toLocaleDateString()} ~ {new Date(trip.end_date).toLocaleDateString()}
                                     <br />
                                     💵 Budget: ${trip.budget}
                                 </p>
-                                <Button variant="outline" as={Link} to="/expenses">
-                                    Expenses
+                                <Button variant="outline" onClick={()=>handleViewExpenses(trip.id)}>
+                                    View Expenses
                                 </Button>
                             </Box>
                         </TripCard>
