@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
-} from "recharts";
 import { Box, Button } from "../styles";
 import styled from "styled-components";
+import {
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell
+} from "recharts";
 
 
 const COLORS = [
@@ -18,7 +18,6 @@ function Dashboard() {
   const [expenses, setExpenses] = useState([]);
   const navigate = useNavigate();
 
-  // 获取最新 trip 信息
   useEffect(() => {
     fetch("/trips/latest", {
       headers: {
@@ -32,7 +31,7 @@ function Dashboard() {
       .then((data) => {
         setTrip(data);
 
-        // 接着获取这个 trip 的所有支出
+        // get all expense records
         return fetch(`/expenses?trip_id=${data.id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -45,9 +44,18 @@ function Dashboard() {
       })
       .then((data) => {
         console.log("Fetched expenses:", data);
-        // setExpenses(data);
-        setExpenses(data.expenses)
-      })
+        // total spent by category
+        const grouped = data.expenses.reduce((acc, curr) => {
+            const existing = acc.find((item) => item.category === curr.category);
+            if (existing) {
+                existing.amount += curr.amount;
+            } else {
+                acc.push({ category: curr.category, amount: curr.amount });
+            }
+            return acc;
+        }, []);
+        setExpenses(grouped);
+    })
       .catch((err) => {
         console.error(err);
       });
@@ -58,8 +66,7 @@ function Dashboard() {
   }
 
   const { id, destination, start_date, end_date, budget } = trip;
-  const totalSpent = expenses.reduce((sum, item) => sum + item.total, 0);
-//   const totalSpent = expenses.reduce((acc, curr) => acc + curr.amount, 0);
+  const totalSpent = expenses.reduce((sum, item) => sum + item.amount, 0);
   const remainingBudget = budget - totalSpent;
 
   return (
@@ -69,38 +76,36 @@ function Dashboard() {
         <h2>Welcome back!</h2>
         <h3>Here's your current trip summary:</h3>
 
-        {/* <div style={{
-            border: "1px solid #ccc",
-            borderRadius: "10px",
-            padding: "20px",
-            maxWidth: "600px",
-            marginTop: "20px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
-        }}> */}
         <TripCard key={trip.id}>
             <Box>
-                <h3>{destination}</h3>
-                <p><strong>Dates:</strong> {start_date} - {end_date}</p>
+                <h2>{destination}</h2>
+                <p>📅 {new Date(start_date).toLocaleDateString()} ~ {new Date(end_date).toLocaleDateString()}</p>
                 <p><strong>Budget:</strong> ${budget}</p>
-                <p><strong>Total Spent:</strong> ${totalSpent}</p>
-                <p><strong>Remaining Budget:</strong> ${remainingBudget}</p>
-                <Button variant="outline" onClick={() => navigate(`/trips/${id}/expenses`)} style={{ marginTop: "10px" }}>
+                <p><strong>Total Spent:</strong> ${totalSpent.toFixed(2)}</p>
+                <p><strong>Remaining Budget:</strong> ${remainingBudget.toFixed(2)}</p>
+                <Button onClick={() => navigate(`/trips/${id}/expenses`)} >
                     View Expense Detail
                 </Button>
             </Box>
         </TripCard>
-        {/* </div> */}
 
         <div style={{ marginTop: "40px", maxWidth: "600px" }}>
             <h4>Spending by Category</h4>
             <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={expenses} margin={{ top: 20, right: 30, left: 10, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="category" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="amount" fill="#4287f5" />
-            </BarChart>
+                <BarChart
+                    data={expenses}
+                    margin={{ top: 20, right: 30, left: 10, bottom: 5 }}
+                >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="category" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="amount">
+                    {expenses.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                    </Bar>
+                </BarChart>
             </ResponsiveContainer>
         </div>
       </Wrapper>
