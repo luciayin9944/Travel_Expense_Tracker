@@ -9,6 +9,7 @@ import NewTrip from "./pages/NewTrip.jsx";
 import ExpenseList from "./pages/ExpenseList.jsx";
 import NewExpense from "./pages/NewExpense.jsx";
 import ExpenseSummary from "./pages/ExpenseSummary.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
       <div style={{ marginLeft: "200px", paddingTop: "60px", padding: "20px" }}>
         <Routes>
           <Route path="/" element={<TripList userId={user.id} />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/trips" element={<TripList userId={user.id} />} />
           <Route path="/newTrip" element={<NewTrip user={user} />} />
           <Route path="/trips/:trip_id/expenses" element={<ExpenseList />} />

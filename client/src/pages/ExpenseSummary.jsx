@@ -112,9 +112,9 @@ function ExpenseSummary() {
                     </ul>
 
                     <div style={{ textAlign: "left", fontWeight: "bold", marginTop: "12px" }}>
-                        <h4>Total Budget: ${tripInfo.budget.toFixed(2)}</h4>
-                        <h3>Total Spending: ${totalSpending.toFixed(2)}</h3>
-                        <h4>Remaining: ${(tripInfo.budget - totalSpending).toFixed(2)}</h4>
+                        <h4>Budget: ${tripInfo.budget.toFixed(2)}</h4>
+                        <h3>Total Spent: ${totalSpending.toFixed(2)}</h3>
+                        <h4>Remaining Budget: ${(tripInfo.budget - totalSpending).toFixed(2)}</h4>
                     </div>
                   </SummaryBox>
                 </FlexWrapper>

@@ -12,7 +12,7 @@ function Login({ onLogin }) {
 
   return (
     <Wrapper>
-      <Logo>Expense Tracker</Logo>
+      <Logo>TrackTrip</Logo>
       {showLogin ? (
         <>
           <LoginForm onLogin={onLogin} />

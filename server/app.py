@@ -116,7 +116,7 @@ class TripsIndex(Resource):
             start_date = datetime.strptime(data["start_date"], "%Y-%m-%d").date()
             end_date = datetime.strptime(data["end_date"], "%Y-%m-%d").date()
         except (KeyError, ValueError):
-            return {"errors": ["Invalid or missing date format. Use YYYY-MM-DD."]}, 400
+            return {"errors": ["Invalid or missing data."]}, 400
 
         new_trip = Trip(
             destination = data.get("destination"),
@@ -299,9 +299,15 @@ class CategorySummary(Resource):
         ])
 
 
+class LatestTrip(Resource):
+    @jwt_required()
+    def get(self):
+        curr_user_id = get_jwt_identity()
+        trip = Trip.query.filter_by(user_id=curr_user_id).order_by(Trip.end_date.desc()).first()
 
-
-
+        if not trip:
+            return {"error": "No trips found"}, 404
+        return TripSchema().dump(trip), 200
 
 
 
@@ -314,6 +320,7 @@ api.add_resource(TripDetail, '/trips/<int:id>', endpoint='trip_detail')
 api.add_resource(ExpensesIndex, '/expenses', endpoint='expenses')
 api.add_resource(ExpenseDetail, '/expenses/<int:id>', endpoint='expense_detail')
 api.add_resource(CategorySummary, '/trips/<int:trip_id>/summary')
+api.add_resource(LatestTrip, '/trips/latest')
 
 
 if __name__ == '__main__':
