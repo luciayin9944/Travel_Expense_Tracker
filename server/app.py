@@ -56,12 +56,44 @@ class Login(Resource):
         return {'errors': ['401 Unauthorized']}, 401
 
 
+# filter trips
+def filter_trips_by_date_range(user_id, year=None, month=None):
+    query = Trip.query.filter_by(user_id=user_id)
+
+    try:
+        if year:
+            year = int(year)
+        if month:
+            month = int(month)
+
+        if year and month:
+            start_date = datetime(year, month, 1)
+            end_date = datetime(year + 1, 1, 1) if month == 12 else datetime(year, month + 1, 1)
+            query = query.filter(Trip.start_date < end_date, Trip.end_date >= start_date)
+        elif year:
+            start_date = datetime(year, 1, 1)
+            end_date = datetime(year + 1, 1, 1)
+            query = query.filter(Trip.start_date < end_date, Trip.end_date >= start_date)
+        # else: no filtering
+    except ValueError:
+        raise ValueError("Invalid year or month")
+
+    return query.order_by(Trip.end_date.desc()).all()
+
 
 class TripsIndex(Resource):
     @jwt_required()
     def get(self):
         curr_user_id = get_jwt_identity()
-        trips = Trip.query.filter_by(user_id=curr_user_id).order_by(Trip.end_date.desc()).all()
+        year = request.args.get("year")
+        month = request.args.get("month")
+
+        try:
+            trips = filter_trips_by_date_range(curr_user_id, year, month)
+        except ValueError:
+            return {"error": "Invalid year or month"}, 400
+
+        # trips = Trip.query.filter_by(user_id=curr_user_id).order_by(Trip.end_date.desc()).all()
 
         result = [
             {
@@ -101,7 +133,7 @@ class TripsIndex(Resource):
         except IntegrityError:
 
             return {'errors': ['Trip creation failed.']}, 422
-        
+
         
 class TripDetail(Resource):
     @jwt_required()
@@ -243,30 +275,7 @@ class ExpenseDetail(Resource):
 
 
 
-def get_filtered_query_by_date_range(trip_id, year=None, month=None):
-    query = Expense.query.filter_by(trip_id=trip_id)
 
-    try:
-        if year:
-            year = int(year)
-        if month:
-            month = int(month)
-
-        if year and month:
-            start_date = datetime(year, month, 1)
-            end_date = datetime(year + 1, 1, 1) if month == 12 else datetime(year, month + 1, 1)
-            filteredQuery = query.filter(Expense.date >= start_date, Expense.date < end_date)
-        elif year:
-            start_date = datetime(year, 1, 1)
-            end_date = datetime(year + 1, 1, 1)
-            filteredQuery = query.filter(Expense.date >= start_date, Expense.date < end_date)
-        else:
-            filteredQuery = query
-
-    except ValueError:
-        raise ValueError("Invalid year or month")
-
-    return filteredQuery
 
 class CategorySummary(Resource):
     @jwt_required()
