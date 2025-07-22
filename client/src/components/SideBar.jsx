@@ -7,7 +7,7 @@ function SideBar() {
     <Wrapper>
       <NavButton to="/dashboard">Dashboard</NavButton>
       <NavButton to="/trips">Trips</NavButton>
-      <NavButton to="/expenses_summary">Expenses Summary</NavButton>
+      {/* <NavButton to="/trips/${trip_id}/summary">Expenses Summary</NavButton> */}
     </Wrapper>
   );
 }

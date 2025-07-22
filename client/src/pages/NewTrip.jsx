@@ -104,9 +104,9 @@ function NewTrip({ user }) {
             <p>
                 💵 Budget: ${budget}
                 <br />
-                📅 Start Date: {startDate || "no date"} 
+                📅 Start Date: {startDate || ""} 
                 <br />
-                📅 End Date: {endDate || "no date"}
+                📅 End Date: {endDate || ""}
             </p>
         </WrapperChild>
       </Wrapper>

@@ -19,7 +19,6 @@ function ExpenseList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // const totalExpense = expenses.reduce((sum, e) => sum + Number(e.amount), 0);
 
   useEffect(() => {
     // ?key=value&key2=value2  /trips?trip_id=3&page=2&per_page=5

@@ -1,7 +1,6 @@
  // ExpenseSummary.jsx
 
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";

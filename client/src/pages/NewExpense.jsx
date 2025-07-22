@@ -1,12 +1,12 @@
 // NewExpense.jsx
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button, Error, FormField, Input, Label } from "../styles";
 import { useParams } from "react-router-dom";
 
-function NewExpense({ trip }) {
+function NewExpense() {
   const { trip_id } = useParams();
   const [purchaseItem, setPurchaseItem] = useState("");
   const [amount, setAmount] = useState("");
@@ -15,6 +15,25 @@ function NewExpense({ trip }) {
   const [errors, setErrors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [trip, setTrip] = useState(null);
+
+  useEffect(() => {
+    fetch(`/trips/${trip_id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((r) => {
+        if (!r.ok) throw new Error("Failed to fetch trip info");
+        return r.json();
+      })
+      .then((data) => setTrip(data))
+      .catch((err) => {
+        console.errors(err);
+        // setErrors("Failed to load trip");
+      });
+  }, [trip_id]);
+
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -43,10 +62,12 @@ function NewExpense({ trip }) {
     });
   }
 
+  if (!trip) return <p>Loading trip info...</p>;
+
   return (
     <Wrapper>
       <WrapperChild>
-        <h2>Add an Expense</h2>
+        <h2>Create New Expense for {trip.destination}</h2>
         <form onSubmit={handleSubmit}>
           <FormField>
             <Label htmlFor="purchaseItem">Expense Item</Label>
@@ -94,6 +115,8 @@ function NewExpense({ trip }) {
                 id="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
+                min={trip.start_date}   // Restrict the date to not be earlier than the trip's start date
+                max={trip.end_date}  // Restrict the date to not be later than the trip's end date
             />
           </FormField>
           <FormField>
@@ -108,7 +131,6 @@ function NewExpense({ trip }) {
           </FormField>
         </form>
       </WrapperChild>
-
       <WrapperChild>
         <h1>{purchaseItem}</h1>
         <p>
@@ -133,6 +155,7 @@ const Wrapper = styled.section`
 
 const WrapperChild = styled.div`
   flex: 1;
+  margin: 40px auto;
 `;
 
 export default NewExpense;
