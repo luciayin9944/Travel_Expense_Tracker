@@ -1,9 +1,9 @@
 // ExpenseList.jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
-import { Box, Button } from "../styles";
-import Pagination from "../components/Pagination";
+import { Wrapper, Title, ExpenseCard, EditForm } from "./style";
+import { Box, Button } from "../../styles";
+import Pagination from "../../components/Pagination";
 import { useParams } from "react-router-dom";
 
 function ExpenseList() {
@@ -120,7 +120,6 @@ function ExpenseList() {
       )}
 
       <div style={{ textAlign: "center" }}>
-        {/* <p style={{ fontWeight: "bold" }}>Total: ${totalExpense.toFixed(2)}</p> */}
         <Button as={Link} to={`/trips/${trip_id}/new_expense`} variant="outline">
           New Expense
         </Button>
@@ -194,44 +193,6 @@ function ExpenseList() {
     </div>
   );
 }
-
-const Wrapper = styled.section`
-  max-width: 800px;
-  margin: 40px auto;
-`;
-
-const Title = styled.h1`
-  color: #255b80;
-  text-align: center;
-  font-size: 2.5rem;
-  margin-top: 60px;
-  margin-bottom: 32px;
-`;
-
-const ExpenseCard = styled.article`
-  margin-bottom: 24px;
-  padding: 16px;
-  background-color: #f6f8fa;
-  border-radius: 12px;
-`;
-
-const EditForm = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  input, select {
-    padding: 8px;
-    font-size: 16px;
-  }
-`;
-
-const FilterWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin: 40px auto;
-`;
 
 export default ExpenseList;
 

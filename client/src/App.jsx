@@ -1,24 +1,25 @@
 // App.jsx
 import React, { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import NavBar from "./components/NavBar.jsx";
 import SideBar from "./components/SideBar.jsx";
-import Login from "./pages/Login.jsx";
-import TripList from "./pages/TripList.jsx";
-import NewTrip from "./pages/NewTrip.jsx";
-import ExpenseList from "./pages/ExpenseList.jsx";
-import NewExpense from "./pages/NewExpense.jsx";
-import ExpenseSummary from "./pages/ExpenseSummary.jsx";
-import Dashboard from "./pages/Dashboard.jsx";
+import Login from "./pages/Login/Login.jsx";
+import TripList from "./pages/TripList/TripList";
+import NewTrip from "./pages/NewTrip/NewTrip.jsx";
+import ExpenseList from "./pages/ExpenseList/ExpenseList.jsx";
+import NewExpense from "./pages/NewExpense";
+import ExpenseSummary from "./pages/ExpenseSummary";
+import Dashboard from "./pages/Dashbaord/Dashboard.jsx";
 
 
 function App() {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      fetch("/me", {
+      fetch("/", {
         headers: { Authorization: `Bearer ${token}` }
       }).then((r) => {
         if (r.ok) r.json().then((user) => setUser(user));
@@ -29,6 +30,7 @@ function App() {
   const onLogin = (token, user) => {
     localStorage.setItem("token", token);
     setUser(user);
+    navigate("/dashboard");
   };
 
   if (!user) return <Login onLogin={onLogin} />;
@@ -55,61 +57,3 @@ function App() {
 export default App;
 
 
-
-
-
-
-// // App.jsx
-
-// import React, { useEffect, useState } from "react";
-// import NavBar from "./components/NavBar.jsx";
-// import Login from "./pages/Login.jsx";
-// import TripList from "./pages/TripList.jsx";     
-// import NewTrip from "./pages/NewTrip.jsx";
-// import { Routes, Route } from "react-router-dom";
-
-// function App() {
-//   const [user, setUser] = useState(null);
-
-//   useEffect(() => {
-//     const token = localStorage.getItem("token");
-//     if (token) {
-//       fetch("/me", {
-//         headers: {
-//           Authorization: `Bearer ${token}`
-//         }
-//       }).then((r) => {
-//         if (r.ok) {
-//           r.json().then((user) => setUser(user));
-//         }
-//       });
-//     }
-//   }, []);
-
-//   const onLogin = (token, user) => {
-//     localStorage.setItem("token", token);
-//     setUser(user);
-//   };
-
-//   if (!user) return <Login onLogin={onLogin} />;
-
-//   return (
-//     <>
-//       <NavBar setUser={setUser} user={user} />
-//       <main>
-//         <Routes>
-//           <Route
-//             path="/newTrip"
-//             element={<NewTrip user={user} />}
-//           />
-//           <Route
-//             path="/"
-//             element={<TripList userId={user.id} />}
-//           />
-//         </Routes>
-//       </main>
-//     </>
-//   );
-// }
-
-// export default App;

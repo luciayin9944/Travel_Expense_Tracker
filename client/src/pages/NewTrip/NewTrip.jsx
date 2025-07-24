@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { Button, Error, FormField, Input, Label } from "../styles";
+import { Wrapper, WrapperChild } from "./style";
+import { Button, Error, FormField, Input, Label } from "../../styles";
 
 
-function NewTrip({ user }) {
+function NewTrip() {
     const [destination, setDestination] = useState("")
     const [budget, setBudget] = useState("")
     const [startDate, setStartDate] = useState("")
@@ -112,19 +112,5 @@ function NewTrip({ user }) {
       </Wrapper>
   );
 }
-
-const Wrapper = styled.section`
-  max-width: 1000px;
-  margin: 40px auto;
-  padding: 16px;
-  display: flex;
-  gap: 100px;
-`;
-
-const WrapperChild = styled.div`
-  flex: 1;
-  margin: 40px auto;
-`;
-
 
 export default NewTrip;

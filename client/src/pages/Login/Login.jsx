@@ -1,11 +1,10 @@
 // Login.jsx
 
 import { useState } from "react";
-import styled from "styled-components";
-import LoginForm from "../components/LoginForm";
-import SignUpForm from "../components/SignUpForm";
-import { Button } from "../styles.jsx";
-
+import LoginForm from "../../components/LoginForm.jsx";
+import SignUpForm from "../../components/SignUpForm.jsx";
+import { Button } from "../../styles.jsx";
+import { Logo, Wrapper, Divider } from "./style.js";
 
 function Login({ onLogin }) {
   const [showLogin, setShowLogin] = useState(true);
@@ -39,25 +38,6 @@ function Login({ onLogin }) {
     </Wrapper>
   );
 }
-
-const Logo = styled.h1`
-  font-family: "Permanent Marker", cursive;
-  font-size: 3rem;
-  color: #255b80;
-  margin: 8px 0 16px;
-`;
-
-const Wrapper = styled.section`
-  max-width: 500px;
-  margin: 40px auto;
-  padding: 16px;
-`;
-
-const Divider = styled.hr`
-  border: none;
-  border-bottom: 1px solid #ccc;
-  margin: 16px 0;
-`;
 
 
 export default Login;

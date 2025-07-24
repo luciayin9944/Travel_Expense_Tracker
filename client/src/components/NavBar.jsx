@@ -1,13 +1,17 @@
 // components/NavBar.jsx
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../styles.jsx";
 
 function NavBar({ user, setUser }) {
+  const navigate = useNavigate(); 
+
   function handleLogoutClick() {
     localStorage.removeItem("token");
     setUser(null);
+    navigate("/");
+
   }
 
   return (

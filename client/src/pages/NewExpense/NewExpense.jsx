@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { Button, Error, FormField, Input, Label } from "../styles";
+import { Wrapper, WrapperChild } from "./style";
+import { Button, Error, FormField, Input, Label } from "../../styles";
 import { useParams } from "react-router-dom";
 
 function NewExpense() {
@@ -30,7 +30,6 @@ function NewExpense() {
       .then((data) => setTrip(data))
       .catch((err) => {
         console.errors(err);
-        // setErrors("Failed to load trip");
       });
   }, [trip_id]);
 
@@ -144,19 +143,6 @@ function NewExpense() {
     </Wrapper>
   );
 }
-
-const Wrapper = styled.section`
-  max-width: 1000px;
-  margin: 40px auto;
-  padding: 16px;
-  display: flex;
-  gap: 24px;
-`;
-
-const WrapperChild = styled.div`
-  flex: 1;
-  margin: 40px auto;
-`;
 
 export default NewExpense;
 
